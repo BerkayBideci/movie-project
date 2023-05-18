@@ -3,7 +3,7 @@
 const TMDB_BASE_URL = "https://api.themoviedb.org/3";
 const PROFILE_BASE_URL = "http://image.tmdb.org/t/p/w185";
 const BACKDROP_BASE_URL = "http://image.tmdb.org/t/p/w780";
-const CONTAINER = document.querySelector(".container");
+const CONTAINER = document.querySelector(".movie-container");
 
 // Don't touch this function please
 const autorun = async () => {
@@ -74,8 +74,22 @@ const renderMovie = (movie) => {
         </div>
         </div>
             <h3>Actors:</h3>
-            <ul id="actors" class="list-unstyled"></ul>
+            <ul id="actors" class="list-unstyled">
+            
+            </ul>
     </div>`;
 };
 
 document.addEventListener("DOMContentLoaded", autorun);
+
+
+
+// hamburger menu manipulation 
+const hamburgerIcon = document.querySelector('#toggle');
+const hamburgerNav = document.querySelector('#ham-nav');
+
+hamburgerIcon.addEventListener('click', e => {
+  hamburgerIcon.classList.toggle('change');
+  hamburgerNav.classList.toggle('hidden');
+  
+})

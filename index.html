@@ -4,15 +4,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
     <title>Movie</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
-    <div class="container">
+  <div class="bg-slate-500">
+    <div id="navbar" class="container mx-auto flex items-center justify-between text-white h-24 px-5 ">
+      <div id="logo" class="text-4xl font-bold">
+        <a href="index.html">Logo</a>
+      </div>
+      <nav class="hidden space-x-5 md:block">
+        <a href="index.html">Home</a>
+        <a href="#">Actors</a>
+        <a href="#">About</a>
+        <a href="#">Genre <i class="fa-solid fa-caret-down"></i></a>
+
+        <a href="#">Filter
+           <i class="fa-solid fa-caret-down"></i>
+        </a>
+        <input type="text" placeholder="Search" class="ps-2 rounded-md outline-0 text-black py-1">
+      </nav>
+      
+
+      <div id="toggle" class=" block hamburger  cursor-pointer md:hidden text-white" >
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+      </div>
+
+
+      
     </div>
-    <script type="text/javascript" src="script.js"></script>
+  </div>
+
+  <nav id="ham-nav" class="hidden absolute text-white bg-slate-500 w-full flex flex-col space-y-4 py-3 items-center justify-center md:hidden">
+    <a href="index.html">Home</a>
+    <a href="#">Actors</a>
+    <a href="#">About</a>
+    <a href="#">Genre <i class="fa-solid fa-caret-down"></i></a>
+
+    <a href="#">Filter
+       <i class="fa-solid fa-caret-down"></i>
+    </a>
+    <input type="text" placeholder="Search" class="ps-2 rounded-md outline-0 text-black py-1">
+  </nav>
+
+
+  <div></div>
+
+
+  <div class="movie-container container mx-auto">
+
+  </div>
+  
+
+
+  <script type="text/javascript" src="script.js"></script>
 </body>
 
 </html>
