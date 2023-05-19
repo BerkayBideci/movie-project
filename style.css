@@ -9,3 +9,37 @@
 #actors {
     margin: 24px 16px 0 0;
 }
+
+.footerWrap {
+    width:100%;
+    position:fixed;
+    bottom: 0px;    
+}
+
+.footer {
+    width:100%;
+    margin:auto;
+    display: flex;
+}
+
+.footerContent {    
+    width:100%;
+    background-color:#a33c3c;
+    padding:20px ;
+    justify-content: center;
+    display: flex;
+    
+}
+
+.footer h4 {    
+    width:100%; 
+    text-align:center;  
+}
+
+.imgfooter {
+    height: 100px;
+    width: 100px;
+    padding: 10px;
+    filter: grayscale(100%);
+    border-radius: 20px
+}
