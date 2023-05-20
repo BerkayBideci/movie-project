@@ -41,7 +41,6 @@ const fetchMovie = async (movieId) => {
 // You'll need to play with this function in order to add features and enhance the style.
 const renderMovies = (movies) => {
   movies.map((movie) => {
-    console.log(movie, movie.length)
     const movieDiv = document.createElement("div");
     movieDiv.innerHTML = `
         <img src="${BACKDROP_BASE_URL + movie.backdrop_path}" alt="${
