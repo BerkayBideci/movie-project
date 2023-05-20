@@ -2,17 +2,109 @@
 <html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
-    <title>Movie</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+  <title>Movie</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
-    <div class="container">
+  <!-- Navbar Start -->
+  <div class="bg-black">
+    <div id="navbar"
+      class="container mx-auto flex items-center justify-between text-yellow-300 h-36 px-5 text-2xl tracking-wide">
+      <div id="logo">
+        <a href="index.html"><img src="./Logo--.svg" alt="" class="w-36"></a>
+      </div>
+      <nav class="hidden space-x-2 md:block">
+        <a href="index.html" class="hover:bg-yellow-300 hover:text-black rounded-md p-1.5">Home</a>
+        <a href="#" class="hover:bg-yellow-300 hover:text-black rounded-md p-1.5">Actors</a>
+        <a href="#" class="hover:bg-yellow-300 hover:text-black rounded-md p-1.5">About</a>
+        <a href="#" class="genre-menu hover:bg-yellow-300 hover:text-black rounded-md p-1.5">Genre <i
+            class="fa-solid fa-caret-down genre-caret"></i></a>
+
+        <a href="#" class="filter-menu hover:bg-yellow-300 hover:text-black rounded-md p-1.5">Filter
+          <i class="fa-solid fa-caret-down filter-caret"></i>
+        </a>
+        <input type="text" placeholder="Search"
+          class="ps-2 rounded-md outline-0 bg-yellow-300 text-black py-1 placeholder-black">
+      </nav>
+      <div id="toggle" class=" block hamburger cursor-pointer md:hidden text-white">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+      </div>
     </div>
-    <script type="text/javascript" src="script.js"></script>
+  </div>
+
+  <div class="bg-black">
+    <nav id="ham-nav"
+      class="container mx-auto hidden text-yellow-300 bg-black w-full flex flex-col gap-3 py-3 items-center justify-center md:hidden text-2xl tracking-wide">
+      <a href="index.html" class="hover:bg-yellow-300 hover:text-black rounded-md p-1.5">Home</a>
+      <a href="#" class="hover:bg-yellow-300 hover:text-black rounded-md p-1.5">Actors</a>
+      <a href="#" class="hover:bg-yellow-300 hover:text-black rounded-md p-1.5">About</a>
+      <a href="#" class="genre-menu hover:bg-yellow-300 hover:text-black rounded-md p-1.5">Genre
+        <i class="fa-solid fa-caret-down genre-caret"></i>
+      </a>
+
+      <a href="#" class="filter-menu hover:bg-yellow-300 hover:text-black rounded-md p-1.5">Filter
+        <i class="fa-solid fa-caret-down filter-caret"></i>
+      </a>
+      <input type="text" placeholder="Search"
+        class="mb-3 ps-2 rounded-md outline-0 bg-yellow-300 text-black py-1 placeholder-black">
+    </nav>
+  </div>
+
+  <div class="bg-black">
+    <div id="genre-dropdown"
+      class="container mx-auto border-t-4 border-yellow-300 hidden grid grid-cols-2 md:grid-cols-4 place-items-center text-yellow-300 bg-black w-full gap-y-1 py-3 text-2xl tracking-wide dropdown-div">
+      <a href="" class="hover:bg-yellow-300 hover:text-black rounded-md p-1.5">Action</a>
+      <a href="" class="hover:bg-yellow-300 hover:text-black rounded-md p-1.5">Adventure</a>
+      <a href="" class="hover:bg-yellow-300 hover:text-black rounded-md p-1.5">Animation</a>
+      <a href="" class="hover:bg-yellow-300 hover:text-black rounded-md p-1.5">Comedy</a>
+      <a href="" class="hover:bg-yellow-300 hover:text-black rounded-md p-1.5">Crime</a>
+      <a href="" class="hover:bg-yellow-300 hover:text-black rounded-md p-1.5">Documentary</a>
+      <a href="" class="hover:bg-yellow-300 hover:text-black rounded-md p-1.5">Drama</a>
+      <a href="" class="hover:bg-yellow-300 hover:text-black rounded-md p-1.5">Family</a>
+      <a href="" class="hover:bg-yellow-300 hover:text-black rounded-md p-1.5">Fantasy</a>
+      <a href="" class="hover:bg-yellow-300 hover:text-black rounded-md p-1.5">History</a>
+      <a href="" class="hover:bg-yellow-300 hover:text-black rounded-md p-1.5">Horror</a>
+      <a href="" class="hover:bg-yellow-300 hover:text-black rounded-md p-1.5">Music</a>
+      <a href="" class="hover:bg-yellow-300 hover:text-black rounded-md p-1.5">Mystery</a>
+      <a href="" class="hover:bg-yellow-300 hover:text-black rounded-md p-1.5">Romance</a>
+      <a href="" class="hover:bg-yellow-300 hover:text-black rounded-md p-1.5">Science Fiction</a>
+      <a href="" class="hover:bg-yellow-300 hover:text-black rounded-md p-1.5">TV Movie</a>
+      <a href="" class="hover:bg-yellow-300 hover:text-black rounded-md p-1.5">Thriller</a>
+      <a href="" class="hover:bg-yellow-300 hover:text-black rounded-md p-1.5">War</a>
+      <a href="" class="hover:bg-yellow-300 hover:text-black rounded-md p-1.5">Western</a>
+      <a href="" class="hover:bg-yellow-300 hover:text-black rounded-md p-1.5">X</a>
+    </div>
+  </div>
+
+  <div class="bg-black">
+    <div id="filter-dropdown"
+      class="container mx-auto border-t-4 border-yellow-300 hidden grid grid-cols-2 md:grid-cols-4 place-items-center text-yellow-300 bg-black w-full gap-y-1 py-3 text-2xl tracking-wide dropdown-div">
+      <a href="" class="hover:bg-yellow-300 hover:text-black rounded-md p-1.5">Now Playing</a>
+      <a href="" class="hover:bg-yellow-300 hover:text-black rounded-md p-1.5">Upcoming</a>
+      <a href="" class="hover:bg-yellow-300 hover:text-black rounded-md p-1.5">Popular</a>
+      <a href="" class="hover:bg-yellow-300 hover:text-black rounded-md p-1.5">Top Rated</a>
+    </div>
+  </div>
+  <!-- Navbar End -->
+  <div></div>
+
+
+  <div class="movie-container container mx-auto">
+
+  </div>
+
+
+
+  <script type="text/javascript" src="script.js"></script>
 </body>
 
 </html>
