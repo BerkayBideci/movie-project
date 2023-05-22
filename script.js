@@ -5,8 +5,15 @@ const PROFILE_BASE_URL = "http://image.tmdb.org/t/p/w185";
 const BACKDROP_BASE_URL = "http://image.tmdb.org/t/p/w780";
 const CONTAINER = document.querySelector(".movie-container");
 
-// Don't touch this function please
+// // Don't touch this function please
+// const autorun = async () => {
+//   const movies = await fetchMovies();
+//   renderMovies(movies.results);
+// };
+
 const autorun = async () => {
+  const genres = await fetchGenres(); // Fetch genres first
+  renderGenres(genres);
   const movies = await fetchMovies();
   renderMovies(movies.results);
 };
@@ -20,6 +27,14 @@ const constructUrl = (path) => {
 const movieDetails = async (movie) => {
   const movieRes = await fetchMovie(movie.id);
   renderMovie(movieRes);
+};
+
+// This function is to fetch movies by genre
+const fetchMoviesByGenre = async (genreId) => {
+  const url = constructUrl(`discover/movie?with_genres=${genreId}`);
+  const res = await fetch(url);
+  const data = await res.json();
+  renderMovies(data.results);
 };
 
 // This function is to fetch movies. You may need to add it or change some part in it in order to apply some of the features.
@@ -76,4 +91,86 @@ const renderMovie = (movie) => {
     </div>`;
 };
 
-document.addEventListener("DOMContentLoaded", autorun);
+// Fetch and render genre options in the navbar
+const fetchGenres = async () => {
+  const url = constructUrl(`genre/movie/list`);
+  const res = await fetch(url);
+  const data = await res.json();
+  renderGenres(data.genres);
+};
+
+const renderGenres = (genres) => {
+  const genreNav = document.querySelector("#genre-nav");
+  const genreDropdown = document.querySelector("#genre-dropdown");
+
+  genres.forEach((genre) => {
+    const genreItem = document.createElement("li");
+    genreItem.innerText = genre.name;
+    genreItem.addEventListener("click", () => {
+      fetchMoviesByGenre(genre.id);
+      genreDropdown.classList.add("hidden");
+    });
+    genreNav.appendChild(genreItem);
+  });
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+  fetchGenres();
+  autorun();
+});
+
+// hamburger menu manipulation 
+const hamburgerIcon = document.querySelector('#toggle');
+const hamburgerNav = document.querySelector('#ham-nav');
+
+hamburgerIcon.addEventListener('click', e => {
+  hamburgerIcon.classList.toggle('change');
+  hamburgerNav.classList.toggle('hidden');
+
+})
+
+// genre menu manipulation 
+const genreMenu = document.querySelectorAll(".genre-menu")
+const genreDropdown = document.querySelector("#genre-dropdown")
+const genreCaret = document.querySelectorAll(".genre-caret")
+
+genreMenu.forEach(menu => {
+  menu.addEventListener('click', e => {
+    genreDropdown.classList.toggle('hidden')
+    menu.classList.toggle('bg-yellow-300')
+    menu.classList.toggle('text-black')
+    genreCaret.forEach(caret => {
+      if (caret.classList.contains('fa-caret-down')) {
+        caret.classList.remove('fa-caret-down')
+        caret.classList.add('fa-caret-up')
+      }
+      else if (caret.classList.contains('fa-caret-up')) {
+        caret.classList.remove('fa-caret-up')
+        caret.classList.add('fa-caret-down')
+      }
+    })
+  })
+})
+
+// filter menu manipulation 
+const filterMenu = document.querySelectorAll(".filter-menu")
+const filterDropdown = document.querySelector("#filter-dropdown")
+const filterCaret = document.querySelectorAll(".filter-caret")
+
+filterMenu.forEach(menu => {
+  menu.addEventListener('click', e => {
+    filterDropdown.classList.toggle('hidden')
+    menu.classList.toggle('bg-yellow-300')
+    menu.classList.toggle('text-black')
+    filterCaret.forEach(caret => {
+      if (caret.classList.contains('fa-caret-down')) {
+        caret.classList.remove('fa-caret-down')
+        caret.classList.add('fa-caret-up')
+      }
+      else if (caret.classList.contains('fa-caret-up')) {
+        caret.classList.remove('fa-caret-up')
+        caret.classList.add('fa-caret-down')
+      }
+    })
+  })
+})
