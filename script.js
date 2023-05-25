@@ -232,3 +232,25 @@ filterMenu.forEach(menu => {
 });
 
 document.addEventListener("DOMContentLoaded", autorun);
+
+// ACTOR PAGE
+const actorPage = document.querySelector('#actor');
+
+
+const renderActorPage = async (movie) => {
+  console.log(movie)
+}
+
+const actorPageDetails = async (movie) => {
+  const actorRes = await fetchActorPage(movie.id);
+  renderActorPage(actorRes);
+}
+
+const fetchActorPage = async (actor) => {
+  const url = constructUrl(`movie/${actor}/credits`);
+  const res = await fetch(url);
+  return res.json();
+}
+
+
+
