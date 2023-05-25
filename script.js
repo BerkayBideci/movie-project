@@ -1,5 +1,6 @@
 'use strict';
 
+
 const TMDB_BASE_URL = "https://api.themoviedb.org/3";
 const PROFILE_BASE_URL = "http://image.tmdb.org/t/p/w185";
 const BACKDROP_BASE_URL = "http://image.tmdb.org/t/p/w780";
@@ -199,7 +200,6 @@ const renderMovie = async (movie) => {
 
 const renderActor = async (actor) => {
   actor = await actorDetails(actor)
-  console.log(actor)
   let movies = await fetchActorRelatedMovies(actor.id)
   let slicedMovies = movies.cast.splice(0, 10)
   let gender;
@@ -439,3 +439,53 @@ const similarDetails = async (movie) => {
   const similarRes = await fetchSimilar(movie.id);
   return similarRes
 }
+
+
+// ACTOR PAGE
+const actorPage = document.querySelectorAll('.actorsPage');
+actorPage.forEach(actorPage => actorPage.addEventListener('click', async (e) => {
+  let actors = await fetchActorPage();
+  console.log(actors)
+  CONTAINER.innerHTML = `
+  <div class='flex space-x-6 flex-wrap'>
+  ${actors.results.map(actor => {
+    return `
+    
+    <div class='single-actor flex flex-col space-y-4'>
+      <img class='rounded-full' width=100 height=100 src=${BACKDROP_BASE_URL + actor.profile_path} alt=${actor.name}>
+      <p>${actor.name}</p>
+    </div>
+    `
+  }).join('')}
+  </div>
+  `
+
+const singleActor = document.querySelectorAll('.single-actor');
+
+singleActor.forEach(element => element.addEventListener('click', async (e) => {
+  let array = actors.results
+  console.log(array)
+  for ( let x of array){
+    let x = actorDetails(x);
+    return x
+  }
+
+
+  CONTAINER.innerHTML = `
+  <div>
+  </div>
+  `
+}))
+}))
+
+const fetchActorPage = async () => {
+  const url = constructUrl(`person/popular`);
+  const res = await fetch(url);
+  return res.json();
+}
+
+
+
+
+
+
