@@ -57,6 +57,7 @@ const fetchMovies = async (filter) => {
   const res = await fetch(url);
   const data = await res.json();
   movies = data.results;
+  return data;
 };
 
 // Don't touch this function please. This function is to fetch one movie.
@@ -81,10 +82,14 @@ const renderMovies = (moviesToRender) => {
 
   moviesToRender.forEach((movie) => {
     const movieDiv = document.createElement('div');
+    movieDiv.classList.add('cursor-pointer');
     movieDiv.innerHTML = `
-      <img src="${BACKDROP_BASE_URL + movie.backdrop_path}" alt="${movie.title} poster">
-      <h3>${movie.title}</h3>
-      <p>Genres: ${getGenresString(movie.genre_ids)}</p>`;
+      <img class='transition opacity-80 hover:opacity-100 ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300' height='400' width='400' src="${BACKDROP_BASE_URL + movie.backdrop_path}" alt="${movie.title} poster">
+      <div class='space-y-2 pt-3'>
+        <h3 class='text-xl font-bold'>${movie.title}</h3>
+        <p class='text-xs text-slate-400'>Genres: ${getGenresString(movie.genre_ids)}</p>
+      </div>
+      `;
     movieDiv.addEventListener('click', async () => {
       await movieDetails(movie);
     });
@@ -94,73 +99,102 @@ const renderMovies = (moviesToRender) => {
 
 // You'll need to play with this function in order to add features and enhance the style.
 const renderMovie = async (movie) => {
-  console.log(movie)
+  // similar movies 
   let similar = await similarDetails(movie);
-  let slicedSimilar = similar.results.splice(0, 10);
+  let slicedSimilar = similar.results.splice(0, 5);
+  // actors who play in related movie
   let acts = await actorsDetails(movie);
-  let slicedActs = acts.cast.splice(0, 10)
-  let video = await videoDetails(movie)
-  console.log(video, "video")
+  let slicedActs = acts.cast.splice(0, 5)
   const director = acts.crew.find(item => item.name)
+  //trailer movie 
+  const trailer = await trailerDetails(movie);
+
   CONTAINER.innerHTML = `
-    <div class="container mx-auto ">
-        <div>
-             <img id="movie-backdrop" class="mx-auto rounded-lg" src=${BACKDROP_BASE_URL + movie.backdrop_path}>
-        </div>
-        <div class="">
-            <h1 id="movie-title" class='text-4xl font-bold text-center'>${movie.title}</h1>
-            <div class="text-center">
-            <h3 class='font-bold'>Vote Count</h3>
+  <div class="container mx-auto">
+    <div class="flex items-center justify-center">
+      <img id="movie-backdrop" class='text-center' src=${BACKDROP_BASE_URL + movie.backdrop_path}>
+    </div>
+    <h1 id="movie-title" class='text-4xl font-bold text-center py-3 lg:text-6xl'>${movie.title}</h1>
+    <div class="container flex flex-col space-y-12   md:flex-row md:space-x-12 md:space-y-0">
+      <div class="left w-1/2 space-y-4">  
+          <h1 id="movie-title" class='text-3xl font-bold text-center'>Preface</h1>
+          <div class='flex space-x-3 pt-7 justify-center  '>
+            <h3 class='font-bold '>Vote Count:</h3>
             <p id="movie-release-date">${movie.vote_count}</p>
-            </div>
-            <div class="text-center">
-            <h3 class='font-bold'>Vote Average</h3>
+          </div>
+          <div class='flex space-x-3 justify-center'>
+            <h3 class='font-bold '>Vote Average</h3>
             <p id="movie-release-date">${movie.vote_average}</p>
-            </div>
-            <div class="text-center">
+          </div>
+          <div class='flex space-x-3 justify-center'>
             <h3 class='font-bold'>Release Date</h3>
             <p id="movie-release-date">${movie.release_date}</p>
-            </div>
-            <div class="text-center">
+          </div>
+          <div class='flex space-x-3 justify-center'>
             <h3 class='font-bold'>Runtime</h3>
             <p id="movie-runtime">${movie.runtime} Minutes</p>
             </div>
-            <div class="text-center">
+          <div class='flex space-x-3 justify-center '>
             <h3 class='font-bold'>Language</h3>
             <p> ${movie.original_language.toUpperCase()}  </p>
-            </div>
-            <div class="text-center director">
-            </div>
-            <div class="iframe">
-            </div>
-            <div class="text-center">
-            <h3 class='font-bold'>Overview</h3>
-            <p id="movie-overview">${movie.overview}</p>
-            </div>
+          </div>
+          <div class='flex space-x-3 justify-center '>
+            <h3 class='font-bold'>Director:</h3>
+            <p> ${director.name} </p>
+          </div>
+      </div>
+      
+      <div class="right w-1/2 text-center">
+        <h1 class='text-3xl font-bold pb-4 text-center'>Trailer</h1>
+        <div>
+        ${
+          trailer.results && trailer.results.length > 0 && trailer.results[0].key
+            ? `<div>
+                 <iframe width="88%" height="275" src="https://www.youtube.com/embed/${trailer.results[0].key}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                 <figcaption class="overlay"></figcaption>
+               </div>`
+            : `<p>No trailer available</p>`
+        }
         </div>
+      </div>
+    </div>
+
+    <div class='space-y-3 pt-12 text-center'>
+        <div id="Actors">
+          <h3 class='text-3xl font-bold'>Actors:</h3>
+          <ul id="actors" class="container flex flex-wrap space-x-12 justify-center gap-y-6 py-6">
+          ${slicedActs.map(actor => `
+            <li class='cursor-pointer actor'>
+              <img width='150' height='100' class='rounded-full opacity-80 hover:opacity-100 rounded-full transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300' src=${BACKDROP_BASE_URL + actor.profile_path} alt='${actor.name}'>
+              <p class='font-bold pt-2 text-slate-500'> ${actor.name} </p>
+            </li>
+          `).join('')}
+          </ul>
         </div>
-            <h3 class='text-3xl font-bold'>Actors:</h3>
-            <ul id="actors" class="container flex flex-wrap space-x-12   gap-y-6 py-6">
-            ${slicedActs.map(actor => `
-              <li class="actor">
-                <img width='100' height='100' class='rounded-full' src=${BACKDROP_BASE_URL + actor.profile_path} alt='${actor.name}'>
-                <p class=''> ${actor.name} </p>
-              </li>
-            `).join('')}
-            </ul>
-            <h3 class='text-3xl font-bold'>Similar Movies</h3>
-            <ul id="actors" class="container flex flex-wrap space-x-12  gap-y-6 py-6">
-                ${slicedSimilar.map(similar => `
-                <li class="similar-movie">
-                <img width='150' height='150' class='rounded-full' src=${BACKDROP_BASE_URL + similar.backdrop_path} alt='${similar.title}'>
-                <p class=''> ${similar.title} </p>
-              </li>
-                `).join('')}
-            </ul>
-            <h3 class='text-3xl font-bold'>Production Companies</h3>
-            <ul class="container flex flex-wrap space-x-12 gap-y-6 py-6 production-logo">
-            </ul>
-    </div>`;
+        <div id="relatedMovies">
+          <h3 class='text-3xl font-bold'>Similar Movies</h3>
+          <ul id="actors" class="container flex flex-wrap space-x-12 justify-center gap-y-6 py-6">
+              ${slicedSimilar.map(similar => `
+            <li class='cursor-pointer similar-movie'>
+              <img width='300' height='300' class='rounded-full opacity-80 hover:opacity-100 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300' src=${BACKDROP_BASE_URL + similar.backdrop_path} alt='${similar.title}'>
+              <p class='font-bold pt-2 text-slate-500'> ${similar.title} </p>
+            </li>
+              `).join('')}
+          </ul>
+        </div>
+        <div id="relatedMovies">
+          <h3 class='text-3xl font-bold'>Production Companies</h3>
+          <ul id="actors" class="container flex flex-wrap space-x-12 justify-center gap-y-6 py-6">
+              ${`
+            <li class='cursor-pointer'>
+              <img width='200' height='200' class='transition opacity-80 hover:opacity-100 ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300' src=${BACKDROP_BASE_URL + movie.production_companies[0].logo_path} alt='${movie.name}'>
+            </li>
+              `}
+          </ul>
+        </div>
+    </div>
+    </div>
+   `;
 
   const similarMovieDiv = document.querySelectorAll('.similar-movie');
   similarMovieDiv.forEach((element, index) => {
@@ -171,32 +205,25 @@ const renderMovie = async (movie) => {
 
 
 
+
   const actorDiv = document.querySelectorAll('.actor');
   actorDiv.forEach((element, index) => {
     element.addEventListener('click', () => {
       renderActor(slicedActs[index]);
     });
   })
-
-  const directorDiv = document.querySelector(".director")
-  if (director.name) {
-    directorDiv.innerHTML = `<h3 class='font-bold'>Director</h3>
-            <p> ${director.name} </p>`
-  }
-
-  const iframe = document.querySelector(".iframe")
-  if (video.results !== []) {
-    iframe.innerHTML = `<iframe width="560" height="315" class="mx-auto iframe" src="https://www.youtube.com/embed/${video.results[0].key}" title="YouTube video player" referrerpolicy="no-referrer-when-downgrade" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen>
-    </iframe>`
-  }
-
-  const productionLogo = document.querySelector(".production-logo")
-  if (movie.production_companies[0].logo_path) {
-    productionLogo.innerHTML = `<li>
-                <img width='200' height='200'  src=${BACKDROP_BASE_URL + movie.production_companies[0].logo_path} alt='${movie.name}'>
-              </li>`
-  }
 };
+
+const fetchTrailer = async (trailer) => {
+  const url = constructUrl(`movie/${trailer}/videos`);
+  const res = await fetch(url);
+  return res.json();
+}
+
+const trailerDetails = (movie) => {
+  const trailerRes = fetchTrailer(movie.id);
+  return trailerRes;
+}
 
 const renderActor = async (actor) => {
   actor = await actorDetails(actor)
@@ -447,12 +474,11 @@ actorPage.forEach(actorPage => actorPage.addEventListener('click', async (e) => 
   let actors = await fetchActorPage();
   console.log(actors)
   CONTAINER.innerHTML = `
-  <div class='flex space-x-6 flex-wrap'>
+  <div class='flex space-x-6 flex-wrap items-center justify-center gap-6 py-3'>
   ${actors.results.map(actor => {
     return `
     
-    <div class='single-actor flex flex-col space-y-4'>
-      <img class='rounded-full' width=100 height=100 src=${BACKDROP_BASE_URL + actor.profile_path} alt=${actor.name}>
+    <div class='single-actor  flex flex-col  space-y-4 cursor-pointer'> <img class='rounded-full opacity-75 hover:opacity-100 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300' width='200' height='200' src=${BACKDROP_BASE_URL + actor.profile_path} alt=${actor.name}>
       <p>${actor.name}</p>
     </div>
     `
@@ -462,19 +488,9 @@ actorPage.forEach(actorPage => actorPage.addEventListener('click', async (e) => 
 
 const singleActor = document.querySelectorAll('.single-actor');
 
-singleActor.forEach(element => element.addEventListener('click', async (e) => {
-  let array = actors.results
-  console.log(array)
-  for ( let x of array){
-    let x = actorDetails(x);
-    return x
-  }
-
-
-  CONTAINER.innerHTML = `
-  <div>
-  </div>
-  `
+singleActor.forEach((actorDiv, index) => actorDiv.addEventListener('click', async (e) => {
+  let actor = actors.results[index];
+  await renderActor(actor);
 }))
 }))
 
@@ -484,8 +500,78 @@ const fetchActorPage = async () => {
   return res.json();
 }
 
+// search input 
+const searchInput = document.querySelector('#input');
+searchInput.addEventListener('input', e => filterMoviesByInput());
+
+function displayFilteredMovies(movies) {
+  CONTAINER.innerHTML = '';
+
+  if (movies.length === 0) {
+    CONTAINER.innerHTML = `<h1 class='text-4xl font-bold text-red-700'>No movies found</h1>`;
+    return;
+  }
+
+  for (let movie of movies) {
+    const movieDiv = document.createElement('div');
+    movieDiv.classList.add('cursor-pointer');
+    movieDiv.innerHTML = `
+      <img class='transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300' height='400' width='400' src="${BACKDROP_BASE_URL + movie.backdrop_path}" alt="${movie.title} poster">
+      <div class='space-y-2 pt-3'>
+        <h3 class='text-xl font-bold'>${movie.title}</h3>
+        <p class='text-xs text-slate-500'>Genres: ${getGenresString(movie.genre_ids)}</p>
+      </div>
+      `;
+    movieDiv.addEventListener('click', async () => {
+      await movieDetails(movie);
+    });
+    CONTAINER.appendChild(movieDiv);
+    // CONTAINER.appendChild(movieItem);
+  }
+}
 
 
 
+async function filterMoviesByInput() {
+  const movies = await fetchMovies('now_playing');
+  
+  console.log(movies)
+  const searchValue = searchInput.value.toLowerCase()
+
+  
+  const filteredMovies = movies.results.filter(movie => movie.original_title.toLowerCase().includes(searchValue));
+  console.log(filteredMovies)
+  displayFilteredMovies(filteredMovies);
+}
+
+filterMoviesByInput()
+
+
+// ABOUT PAGE
+// script.js
+const aboutContent = `
+<h1 class="about-heading">nice to meet you!!</h1>
+<div class="iframe-container">
+  <iframe src="https://giphy.com/embed/1ZVBVvY5kS7qUHhqI2" width="480" height="480" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+</div>
+  <h2 class="about-subheading">and bye!</h2>
+
+`;
+
+const showAboutPage = () => {
+  CONTAINER.innerHTML = aboutContent;
+};
+
+const aboutBtns = document.querySelectorAll('.aboutButton');
+console.log(aboutBtns);
+aboutBtns.forEach(btn => btn.addEventListener('click', e => {
+  showAboutPage()
+}))
+
+
+// ... Existing code ...
+
+
+autorun();
 
 
