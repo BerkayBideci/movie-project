@@ -502,7 +502,7 @@ actorPage.forEach(actorPage => actorPage.addEventListener('click', async (e) => 
   ${actors.results.map(actor => {
     return `
     
-    <div class='single-actor  flex flex-col  space-y-4 cursor-pointer'> <img class='rounded-full shadow-xl shadow-slate-800 opacity-75 hover:opacity-100 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300' width='200' height='200' src=${BACKDROP_BASE_URL + actor.profile_path} alt=${actor.name}>
+    <div class='single-actor flex flex-col  space-y-4 cursor-pointer text-2xl'> <img class='rounded-full shadow-xl shadow-slate-800 opacity-75 hover:opacity-100 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300' width='200' height='200' src=${BACKDROP_BASE_URL + actor.profile_path} alt=${actor.name}>
       <p>${actor.name}</p>
     </div>
     `
@@ -530,11 +530,11 @@ searchInputs.forEach(input => input.addEventListener('input', e => filterByInput
 
 function displayFilteredMovies(movies) {
   const moviesContainer = document.createElement('div');
-  moviesContainer.innerHTML = '';
+  moviesContainer.classList.add("flex", "flex-wrap", "justify-center", "items-center", "gap-8")
 
   if (movies.length === 0) {
-    moviesContainer.innerHTML = `<h1 class='text-4xl font-bold text-red-700'>No movies found</h1>`;
-    return;
+    moviesContainer.innerHTML = `<h1 class='text-3xl text-slate-400 italic'>No movies found</h1>`;
+    CONTAINER.appendChild(moviesContainer);
   }
 
   for (let movie of movies) {
@@ -553,22 +553,27 @@ function displayFilteredMovies(movies) {
     moviesContainer.appendChild(movieDiv);
     CONTAINER.appendChild(moviesContainer);
   }
+
+  const moviesHeader = document.createElement("h3");
+  moviesHeader.innerHTML = `MOVIES`;
+  moviesHeader.classList.add("text-4xl", "text-yellow-300");
+  CONTAINER.insertBefore(moviesHeader, moviesContainer);
 }
 
 function displayFilteredActors(actors) {
-  const actorsContainer = document.createElement('div');
-  actorsContainer.innerHTML = '';
+  const actorsContainer = document.createElement('div')
+  actorsContainer.classList.add("flex", "flex-wrap", "justify-center", "items-center", "gap-6", "space-x-6")
 
   if (actors.length === 0) {
-    actorsContainer.innerHTML = `<h1 class='text-4xl font-bold text-red-700'>No actors found</h1>`;
-    return;
+    actorsContainer.innerHTML = `<h1 class='text-3xl text-slate-400 italic'>No actors found</h1>`;
+    CONTAINER.appendChild(actorsContainer);
   }
 
   for (let actor of actors) {
     const actorDiv = document.createElement('div');
     actorDiv.classList.add('cursor-pointer', 'my-5');
     actorDiv.innerHTML = `
-        <div class='single-actor  flex flex-col  space-y-4 cursor-pointer'> <img class='rounded-full shadow-xl shadow-slate-800 opacity-75 hover:opacity-100 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300' width='200' height='200' src=${BACKDROP_BASE_URL + actor.profile_path} alt=${actor.name}>
+        <div class='single-actor  flex flex-col  space-y-4 cursor-pointer text-2xl'> <img class='rounded-full shadow-xl shadow-slate-800 opacity-75 hover:opacity-100 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300' width='200' height='200' src=${BACKDROP_BASE_URL + actor.profile_path} alt=${actor.name}>
       <p>${actor.name}</p>
     </div>
     `;
@@ -578,10 +583,15 @@ function displayFilteredActors(actors) {
     actorsContainer.appendChild(actorDiv);
     CONTAINER.appendChild(actorsContainer);
   }
+
+  const actorsHeader = document.createElement("h3");
+  actorsHeader.innerHTML = `ACTORS`;
+  actorsHeader.classList.add("text-4xl", "text-yellow-300");
+  CONTAINER.insertBefore(actorsHeader, actorsContainer);
 }
 
 async function filterByInput() {
-  CONTAINER.innerHTML = " "
+  CONTAINER.innerHTML = ""
   CONTAINER.classList.add("flex-col")
   const movies = await fetchMovies('now_playing');
   const actors = await fetchActorPage();
