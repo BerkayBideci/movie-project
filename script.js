@@ -562,7 +562,7 @@ function displayFilteredMovies(movies) {
 
 function displayFilteredActors(actors) {
   const actorsContainer = document.createElement('div')
-  actorsContainer.classList.add("flex", "flex-wrap", "justify-center", "items-center", "gap-6", "space-x-6")
+  actorsContainer.classList.add("flex", "flex-wrap", "justify-center", "items-center", "gap-6")
 
   if (actors.length === 0) {
     actorsContainer.innerHTML = `<h1 class='text-3xl text-slate-400 italic'>No actors found</h1>`;
