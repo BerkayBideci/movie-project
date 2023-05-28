@@ -147,14 +147,13 @@ const renderMovie = async (movie) => {
       <div class="right w-1/2 text-center">
         <h1 class='text-4xl font-bold pb-4 text-center'>Trailer</h1>
         <div>
-        ${
-          trailer.results && trailer.results.length > 0 && trailer.results[0].key
-            ? `<div class='pl-6'>
+        ${trailer.results && trailer.results.length > 0 && trailer.results[0].key
+      ? `<div class='pl-6'>
                  <iframe class='ml-6 shadow-xl shadow-slate-900' width="83%" height="275" src="https://www.youtube.com/embed/${trailer.results[0].key}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                  <figcaption class="overlay"></figcaption>
                </div>`
-            : `<p>No trailer available</p>`
-        }
+      : `<p>No trailer available</p>`
+    }
         </div>
       </div>
     </div>
@@ -511,12 +510,12 @@ actorPage.forEach(actorPage => actorPage.addEventListener('click', async (e) => 
   </div>
   `
 
-const singleActor = document.querySelectorAll('.single-actor');
+  const singleActor = document.querySelectorAll('.single-actor');
 
-singleActor.forEach((actorDiv, index) => actorDiv.addEventListener('click', async (e) => {
-  let actor = actors.results[index];
-  await renderActor(actor);
-}))
+  singleActor.forEach((actorDiv, index) => actorDiv.addEventListener('click', async (e) => {
+    let actor = actors.results[index];
+    await renderActor(actor);
+  }))
 }))
 
 const fetchActorPage = async () => {
@@ -526,50 +525,84 @@ const fetchActorPage = async () => {
 }
 
 // search input 
-const searchInput = document.querySelector('#input');
-searchInput.addEventListener('input', e => filterMoviesByInput());
+const searchInputs = document.querySelectorAll('.input');
+searchInputs.forEach(input => input.addEventListener('input', e => filterByInput()));
 
 function displayFilteredMovies(movies) {
-  CONTAINER.innerHTML = '';
+  const moviesContainer = document.createElement('div');
+  moviesContainer.innerHTML = '';
 
   if (movies.length === 0) {
-    CONTAINER.innerHTML = `<h1 class='text-4xl font-bold text-red-700'>No movies found</h1>`;
+    moviesContainer.innerHTML = `<h1 class='text-4xl font-bold text-red-700'>No movies found</h1>`;
     return;
   }
 
   for (let movie of movies) {
     const movieDiv = document.createElement('div');
-    movieDiv.classList.add('cursor-pointer');
+    movieDiv.classList.add('cursor-pointer', 'my-5');
     movieDiv.innerHTML = `
-      <img class='transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300' height='400' width='400' src="${BACKDROP_BASE_URL + movie.backdrop_path}" alt="${movie.title} poster">
+      <img class='transition shadow-xl shadow-slate-900 opacity-80 hover:opacity-100 ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300' height='400' width='400' src="${BACKDROP_BASE_URL + movie.backdrop_path}" alt="${movie.title} poster">
       <div class='space-y-2 pt-3'>
-        <h3 class='text-xl font-bold'>${movie.title}</h3>
-        <p class='text-xs text-slate-400'>Genres: ${getGenresString(movie.genre_ids)}</p>
+        <h3 class='text-2xl font-bold'>${movie.title}</h3>
+        <p class='text-sm text-slate-400'>Genres: ${getGenresString(movie.genre_ids)}</p>
       </div>
       `;
     movieDiv.addEventListener('click', async () => {
       await movieDetails(movie);
     });
-    CONTAINER.appendChild(movieDiv);
-    // CONTAINER.appendChild(movieItem);
+    moviesContainer.appendChild(movieDiv);
+    CONTAINER.appendChild(moviesContainer);
   }
 }
 
+function displayFilteredActors(actors) {
+  const actorsContainer = document.createElement('div');
+  actorsContainer.innerHTML = '';
 
+  if (actors.length === 0) {
+    actorsContainer.innerHTML = `<h1 class='text-4xl font-bold text-red-700'>No actors found</h1>`;
+    return;
+  }
 
-async function filterMoviesByInput() {
-  const movies = await fetchMovies('now_playing');
-
-  console.log(movies)
-  const searchValue = searchInput.value.toLowerCase()
-
-  
-  const filteredMovies = movies.results.filter(movie => movie.original_title.toLowerCase().includes(searchValue));
-  console.log(filteredMovies)
-  displayFilteredMovies(filteredMovies);
+  for (let actor of actors) {
+    const actorDiv = document.createElement('div');
+    actorDiv.classList.add('cursor-pointer', 'my-5');
+    actorDiv.innerHTML = `
+        <div class='single-actor  flex flex-col  space-y-4 cursor-pointer'> <img class='rounded-full shadow-xl shadow-slate-800 opacity-75 hover:opacity-100 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300' width='200' height='200' src=${BACKDROP_BASE_URL + actor.profile_path} alt=${actor.name}>
+      <p>${actor.name}</p>
+    </div>
+    `;
+    actorDiv.addEventListener('click', async () => {
+      await renderActor(actor);
+    });
+    actorsContainer.appendChild(actorDiv);
+    CONTAINER.appendChild(actorsContainer);
+  }
 }
 
-filterMoviesByInput()
+async function filterByInput() {
+  CONTAINER.innerHTML = " "
+  CONTAINER.classList.add("flex-col")
+  const movies = await fetchMovies('now_playing');
+  const actors = await fetchActorPage();
+
+  const searchValues = Array.from(searchInputs).map(input => input.value.toLowerCase());
+  const searchValue = searchValues.join('');
+  console.log(searchValue)
+
+  if (searchValue === '') {
+    CONTAINER.classList.remove("flex-col")
+    autorun()
+  }
+
+  const filteredMovies = movies.results.filter(movie => movie.original_title.toLowerCase().includes(searchValue));
+  console.log(filteredMovies)
+  const filteredActors = actors.results.filter(actor => actor.name.toLowerCase().includes(searchValue));
+  console.log(filteredActors)
+
+  displayFilteredMovies(filteredMovies);
+  displayFilteredActors(filteredActors);
+}
 
 
 // ABOUT PAGE
