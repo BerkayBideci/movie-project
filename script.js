@@ -27,6 +27,7 @@ const constructUrl = (path) => {
 
 // You may need to add to this function, definitely don't delete it.
 const movieDetails = async (movie) => {
+  // window.scrollTo(0, 0);
   const movieRes = await fetchMovie(movie.id);
   renderMovie(movieRes);
 };
@@ -99,6 +100,7 @@ const renderMovies = (moviesToRender) => {
 
 // You'll need to play with this function in order to add features and enhance the style.
 const renderMovie = async (movie) => {
+  window.scrollTo(0, 0);
   // similar movies 
   let similar = await similarDetails(movie);
   let slicedSimilar = similar.results.splice(0, 5);
@@ -225,6 +227,7 @@ const trailerDetails = (movie) => {
 }
 
 const renderActor = async (actor) => {
+  window.scrollTo(0, 0);
   actor = await actorDetails(actor)
   let movies = await fetchActorRelatedMovies(actor.id)
   let slicedMovies = movies.cast.splice(0, 5)
@@ -634,10 +637,10 @@ aboutBtns.forEach(btn => btn.addEventListener('click', e => {
   showAboutPage()
 }))
 
-
+autorun();
 // ... Existing code ...
 
 
-autorun();
+
 
 
