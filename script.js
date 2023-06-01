@@ -146,12 +146,12 @@ const renderMovie = async (movie) => {
           </div>
       </div>
       
-      <div class="right w-1/2 text-center">
+      <div class="right w-full text-center md:w-1/2">
         <h1 class='text-4xl font-bold pb-4 text-center'>Trailer</h1>
         <div>
         ${trailer.results && trailer.results.length > 0 && trailer.results[0].key
-      ? `<div class='pl-6'>
-                 <iframe class='ml-6 shadow-xl shadow-slate-900' width="83%" height="275" src="https://www.youtube.com/embed/${trailer.results[0].key}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      ? `<div class='pl-8'>
+                 <iframe class='ml-6 shadow-xl shadow-slate-900 ' width="83%" height="275" src="https://www.youtube.com/embed/${trailer.results[0].key}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                  <figcaption class="overlay"></figcaption>
                </div>`
       : `<p>No trailer available</p>`
@@ -163,7 +163,7 @@ const renderMovie = async (movie) => {
     <div class='space-y-3 pt-12 text-center'>
         <div id="Actors">
           <h3 class='text-4xl font-bold'>Actors</h3>
-          <ul id="actors" class="container flex flex-wrap space-x-12 justify-center gap-y-6 py-6">
+          <ul id="actors" class="container flex flex-col flex-wrap  justify-center items-center py-6 md:flex-row md:space-x-12">
           ${slicedActs.map(actor => `
             <li class='cursor-pointer actor'>
               <img width='150' height='100' class='rounded-full shadow-xl shadow-slate-900 opacity-80 hover:opacity-100 rounded-full transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300' src=${BACKDROP_BASE_URL + actor.profile_path} alt='${actor.name}'>
@@ -174,7 +174,7 @@ const renderMovie = async (movie) => {
         </div>
         <div id="relatedMovies">
           <h3 class='text-4xl font-bold'>Similar Movies</h3>
-          <ul id="actors" class="container flex flex-wrap space-x-12 justify-center gap-y-6 py-6">
+          <ul id="actors" class="container flex flex-wrap  justify-center gap-5 py-6 ">
               ${slicedSimilar.map(similar => `
             <li class='cursor-pointer similar-movie'>
               <img width='300' height='300' class='rounded-full shadow-xl shadow-slate-900 opacity-80 hover:opacity-100 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300' src=${BACKDROP_BASE_URL + similar.backdrop_path} alt='${similar.title}'>
@@ -269,12 +269,12 @@ const renderActor = async (actor) => {
               <p class='text-slate-400'>${actor.place_of_birth}</p>
              </div>
 
-             <div class='flex space-x-3 justify-center w-1/2 '>
+             <div class='flex flex-col  justify-center w-1/2 md:space-x-3 md:flex-row'>
               <h3 class='font-bold'>Biography</h3>
               <p class='text-slate-400'>${actor.biography}</p>
              </div>
              <h3 class='text-3xl font-bold py-3'>Related Movies</h3>
-             <ul class="container flex flex-wrap cursor-pointer space-x-12 justify-center gap-y-6 py-6">
+             <ul class="container flex flex-wrap cursor-pointer  justify-center  py-6 md:space-x-12">
                 ${slicedMovies.map(related => `
                 <li class='related-movie'>
                 <img width='300' height='300' class='rounded-full shadow-xl shadow-slate-900 opacity-80 hover:opacity-100 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300' src=${BACKDROP_BASE_URL + related.backdrop_path} alt='${related.title}'>
@@ -503,7 +503,7 @@ actorPage.forEach(actorPage => actorPage.addEventListener('click', async (e) => 
   let actors = await fetchActorPage();
   console.log(actors)
   CONTAINER.innerHTML = `
-  <div class='flex space-x-6 flex-wrap items-center justify-center gap-6 py-3'>
+  <div class='flex  flex-wrap items-center justify-center gap-6 py-3'>
   ${actors.results.map(actor => {
     return `
     
