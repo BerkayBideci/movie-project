@@ -116,8 +116,8 @@ const renderMovie = async (movie) => {
     <div class="flex items-center justify-center">
       <img id="movie-backdrop" class='text-center' src=${BACKDROP_BASE_URL + movie.backdrop_path}>
     </div>
-    <h1 id="movie-title" class='text-4xl font-bold text-center py-3 lg:text-6xl'>${movie.title}</h1>
-    <div class="container flex flex-col space-y-12   md:flex-row md:space-x-12 md:space-y-0">
+    <h1 id="movie-title" class='text-6xl font-bold text-center py-3 '>${movie.title}</h1>
+    <div class="container flex flex-col items-center space-y-12   md:flex-row md:space-x-12 md:space-y-0">
       <div class="left w-1/2 space-y-4 text-xl">  
           <h1 id="movie-title" class='text-4xl font-bold text-center'>Preface</h1>
           <div class='flex  space-x-3 pt-7 justify-center  '>
@@ -498,6 +498,8 @@ const similarDetails = async (movie) => {
 // ACTOR PAGE
 const actorPage = document.querySelectorAll('.actorsPage');
 actorPage.forEach(actorPage => actorPage.addEventListener('click', async (e) => {
+  const hamNav = document.querySelector('#ham-nav');
+  hamNav.classList.add('hidden');
   let actors = await fetchActorPage();
   console.log(actors)
   CONTAINER.innerHTML = `
