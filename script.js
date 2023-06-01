@@ -100,7 +100,7 @@ const renderMovies = (moviesToRender) => {
 
 // You'll need to play with this function in order to add features and enhance the style.
 const renderMovie = async (movie) => {
-  window.scrollTo(0, 0);
+  window.scrollTo({top:0, left:0, behavior:"smooth"});
   // similar movies 
   let similar = await similarDetails(movie);
   let slicedSimilar = similar.results.splice(0, 5);
@@ -227,7 +227,7 @@ const trailerDetails = (movie) => {
 }
 
 const renderActor = async (actor) => {
-  window.scrollTo(0, 0);
+  window.scrollTo({top:0, left:0, behavior:"smooth"});
   actor = await actorDetails(actor)
   let movies = await fetchActorRelatedMovies(actor.id)
   let slicedMovies = movies.cast.splice(0, 5)
