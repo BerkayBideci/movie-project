@@ -1,5 +1,7 @@
 # Movie Project
 
+[--- Live Link ---](https://202303-prm-tr-few.github.io/movie-project-aybike-berkay-medetcan/)
+
 This is a movie database project, where it shows movies, their casts, ratings, trailers, related movies, genres, and so on.
 
 This project uses The Movie DB API: `https://api.themoviedb.org/3`. It is up to
